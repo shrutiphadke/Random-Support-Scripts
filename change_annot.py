@@ -5,8 +5,8 @@ import numpy as np
 import os
 import sys
 
-gt_root = '/home/shruti/virat/gtall/'
-gt_dest = '/home/shruti/virat/gtall/'
+gt_root = '/home/shruti/final_test/gt/'
+gt_dest = '/home/shruti/final_test/gt/'
 
 for root, directories, files in os.walk(gt_root):
 	for filename in files:
@@ -18,8 +18,8 @@ for root, directories, files in os.walk(gt_root):
 		
 		saveim = gt_dest + filename
 		
-		for i in range(360):
-			for j in range(480):
+		for i in range(720):
+			for j in range(1280):
 				if im[i,j] == 0:
 					im[i,j] = 0 #sky
 				if im[i,j] == 1:
@@ -27,7 +27,7 @@ for root, directories, files in os.walk(gt_root):
 				if im[i,j] == 2:
 					im[i,j] = 1 #shadows
 				if im[i,j] == 3:
-					im[i,j] = 0 #grass
+					im[i,j] = 4 #grass
 				if im[i,j] == 4:
 					im[i,j] = 2 #trees
 				if im[i,j] == 5:

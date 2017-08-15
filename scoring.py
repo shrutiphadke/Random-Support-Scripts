@@ -4,12 +4,13 @@ import sys
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
 
 # Global Paths
 
-gt_path = '/home/shruti/cross_val/pass1/gt/'
-pred_path = '/home/shruti/cross_val/pass1/im/'
-or_path = '/home/shruti/cross_val/pass1/or/'
+gt_path = '/home/shruti/cross_val/pass2/gt/'
+pred_path = '/home/shruti/cross_val/pass2/im/'
+or_path = '/home/shruti/cross_val/pass2/or/'
 
 im_nos = 24
 
@@ -28,6 +29,8 @@ cl = np.zeros(class_nos, dtype = np.float64)
 imcount = np.zeros(class_nos, dtype = np.float64)
 pixcount = np.zeros(class_nos, dtype = np.float64)
 imcount = imcount + im_nos
+
+cfmat = np.zeros((5,5), dtype = np.float64)
 ignr = 0
 #print os.listdir('/home/shruti/chirag_test/')
 for root, directories, files in os.walk(gt_path):
@@ -61,6 +64,7 @@ for root, directories, files in os.walk(gt_path):
 		#print correct
 		acc = acc +  (float(correct)) 
 		
+		#print confusion_matrix(gt, im)
 	
 
 		# Mean class average
@@ -81,7 +85,18 @@ for root, directories, files in os.walk(gt_path):
 		        	#print cl
 			else:
 				imcount[l] = imcount[l] -1.0
-			count = 0		
+			count = 0
+			
+		for bet in range(c):
+			for alf in range(r):
+				for gam in range(class_nos):
+					if im[alf, bet] == gam+1:
+						for tht in range(class_nos):
+						
+							if gt[alf, bet] == tht+1:	
+								cfmat[tht, gam] = cfmat[tht, gam] + 1	
+								break
+						break
 		print imcount
 		
 		################################################################################################
@@ -101,7 +116,7 @@ for root, directories, files in os.walk(gt_path):
 		Parking_Lot = [128, 128, 0]
 		Unlabelled = [0,0,0]
 
-		label_colours = np.array([Unlabelled, Street,Building, Trees, Grass, Parking_Lot])
+		label_colours = np.array([Unlabelled,Building, Grass, Trees, Parking_Lot, Street])
 		for l1 in range(0,5):
 		        r1[ind==l1] = label_colours[l1,0]
 		        g1[ind==l1] = label_colours[l1,1]
@@ -119,13 +134,13 @@ for root, directories, files in os.walk(gt_path):
 		rgb_gt[:,:,1] = g_gt/255.0
 		rgb_gt[:,:,2] = b_gt/255.0
 
-	        plt.figure()
-	        plt.imshow(or1)
-		plt.figure()
-		plt.imshow(rgb_gt,vmin=0, vmax=1)
-		plt.figure()
-		plt.imshow(rgb,vmin=0, vmax=1)
-		plt.show()
+	        #plt.figure()
+	        #plt.imshow(or1)
+		#plt.figure()
+		#plt.imshow(rgb_gt,vmin=0, vmax=1)
+		#plt.figure()
+		#plt.imshow(rgb,vmin=0, vmax=1)
+		#plt.show()
 
 		################################################################################################
 		# Weighted Mean Class Average
@@ -133,7 +148,9 @@ for root, directories, files in os.walk(gt_path):
 		# Mean IoU
 
 print imcount
-
+cfmat = cfmat/24
+#cfmat = cfmat/(360*480)
+print cfmat
 #imcount = im_nos - imcount
 cl = np.divide(cl, pixcount)
 print cl

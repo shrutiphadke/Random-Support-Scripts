@@ -3,7 +3,7 @@ import os
 import sys
 import cv2
 import numpy as np
-
+from math import *
 imct = 1
 
 io = '/home/shruti/virat/im/'
@@ -22,8 +22,8 @@ im_nos = 24
 
 for i in range(im_nos):
 	n1 = "{0:0=5d}".format(i+1)
-	ni = io + str(n1) + '.png'
-	ng = go + str(n1) + '.png'
+	ni = io +   str(n1) + '.png'
+	ng = go +   str(n1) + '.png'
 	im = cv2.imread(ni)
 	gt = cv2.imread(ng, 0)
 	print np.unique(gt)
